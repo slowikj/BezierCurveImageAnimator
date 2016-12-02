@@ -28,24 +28,30 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.bezierCurveLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.pointsNumberTextbox = new System.Windows.Forms.TextBox();
             this.generateBezierButton = new System.Windows.Forms.Button();
-            this.imageLabel = new System.Windows.Forms.Label();
-            this.chooseImageDialog = new System.Windows.Forms.OpenFileDialog();
             this.loadImageButton = new System.Windows.Forms.Button();
-            this.rotatingLabel = new System.Windows.Forms.Label();
             this.naiveRotatingButton = new System.Windows.Forms.RadioButton();
             this.filteringRotatingButton = new System.Windows.Forms.RadioButton();
-            this.animationLabel = new System.Windows.Forms.Label();
             this.rotationAnimationButton = new System.Windows.Forms.RadioButton();
             this.onCurveAnimation = new System.Windows.Forms.RadioButton();
             this.startAnimationButton = new System.Windows.Forms.Button();
             this.stopAnimationButton = new System.Windows.Forms.Button();
             this.canvas = new System.Windows.Forms.PictureBox();
             this.visiblePolylineCheckbox = new System.Windows.Forms.CheckBox();
+            this.timer = new System.Windows.Forms.Timer(this.components);
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.imageView = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.canvas)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.imageView)).BeginInit();
             this.SuspendLayout();
             // 
             // bezierCurveLabel
@@ -84,43 +90,21 @@
             this.generateBezierButton.UseVisualStyleBackColor = true;
             this.generateBezierButton.Click += new System.EventHandler(this.generateBezierButton_Click);
             // 
-            // imageLabel
-            // 
-            this.imageLabel.AutoSize = true;
-            this.imageLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.imageLabel.Location = new System.Drawing.Point(12, 154);
-            this.imageLabel.Name = "imageLabel";
-            this.imageLabel.Size = new System.Drawing.Size(54, 20);
-            this.imageLabel.TabIndex = 4;
-            this.imageLabel.Text = "Image";
-            // 
-            // chooseImageDialog
-            // 
-            this.chooseImageDialog.FileName = "openFileDialog1";
-            // 
             // loadImageButton
             // 
-            this.loadImageButton.Location = new System.Drawing.Point(107, 154);
+            this.loadImageButton.Location = new System.Drawing.Point(114, 46);
             this.loadImageButton.Name = "loadImageButton";
             this.loadImageButton.Size = new System.Drawing.Size(59, 23);
             this.loadImageButton.TabIndex = 5;
             this.loadImageButton.Text = "Load";
             this.loadImageButton.UseVisualStyleBackColor = true;
-            // 
-            // rotatingLabel
-            // 
-            this.rotatingLabel.AutoSize = true;
-            this.rotatingLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.rotatingLabel.Location = new System.Drawing.Point(13, 208);
-            this.rotatingLabel.Name = "rotatingLabel";
-            this.rotatingLabel.Size = new System.Drawing.Size(70, 20);
-            this.rotatingLabel.TabIndex = 6;
-            this.rotatingLabel.Text = "Rotating";
+            this.loadImageButton.Click += new System.EventHandler(this.loadImageButton_Click);
             // 
             // naiveRotatingButton
             // 
             this.naiveRotatingButton.AutoSize = true;
-            this.naiveRotatingButton.Location = new System.Drawing.Point(107, 241);
+            this.naiveRotatingButton.Checked = true;
+            this.naiveRotatingButton.Location = new System.Drawing.Point(13, 19);
             this.naiveRotatingButton.Name = "naiveRotatingButton";
             this.naiveRotatingButton.Size = new System.Drawing.Size(53, 17);
             this.naiveRotatingButton.TabIndex = 7;
@@ -131,28 +115,18 @@
             // filteringRotatingButton
             // 
             this.filteringRotatingButton.AutoSize = true;
-            this.filteringRotatingButton.Location = new System.Drawing.Point(107, 264);
+            this.filteringRotatingButton.Location = new System.Drawing.Point(13, 53);
             this.filteringRotatingButton.Name = "filteringRotatingButton";
             this.filteringRotatingButton.Size = new System.Drawing.Size(83, 17);
             this.filteringRotatingButton.TabIndex = 8;
-            this.filteringRotatingButton.TabStop = true;
             this.filteringRotatingButton.Text = "With filtering";
             this.filteringRotatingButton.UseVisualStyleBackColor = true;
-            // 
-            // animationLabel
-            // 
-            this.animationLabel.AutoSize = true;
-            this.animationLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.animationLabel.Location = new System.Drawing.Point(13, 299);
-            this.animationLabel.Name = "animationLabel";
-            this.animationLabel.Size = new System.Drawing.Size(80, 20);
-            this.animationLabel.TabIndex = 9;
-            this.animationLabel.Text = "Animation";
             // 
             // rotationAnimationButton
             // 
             this.rotationAnimationButton.AutoSize = true;
-            this.rotationAnimationButton.Location = new System.Drawing.Point(107, 326);
+            this.rotationAnimationButton.Checked = true;
+            this.rotationAnimationButton.Location = new System.Drawing.Point(18, 31);
             this.rotationAnimationButton.Name = "rotationAnimationButton";
             this.rotationAnimationButton.Size = new System.Drawing.Size(65, 17);
             this.rotationAnimationButton.TabIndex = 10;
@@ -163,31 +137,32 @@
             // onCurveAnimation
             // 
             this.onCurveAnimation.AutoSize = true;
-            this.onCurveAnimation.Location = new System.Drawing.Point(107, 349);
+            this.onCurveAnimation.Location = new System.Drawing.Point(18, 67);
             this.onCurveAnimation.Name = "onCurveAnimation";
             this.onCurveAnimation.Size = new System.Drawing.Size(123, 17);
             this.onCurveAnimation.TabIndex = 11;
-            this.onCurveAnimation.TabStop = true;
             this.onCurveAnimation.Text = "Moving on the curve";
             this.onCurveAnimation.UseVisualStyleBackColor = true;
             // 
             // startAnimationButton
             // 
-            this.startAnimationButton.Location = new System.Drawing.Point(24, 381);
+            this.startAnimationButton.Location = new System.Drawing.Point(24, 531);
             this.startAnimationButton.Name = "startAnimationButton";
             this.startAnimationButton.Size = new System.Drawing.Size(59, 23);
             this.startAnimationButton.TabIndex = 12;
             this.startAnimationButton.Text = "Start";
             this.startAnimationButton.UseVisualStyleBackColor = true;
+            this.startAnimationButton.Click += new System.EventHandler(this.startAnimationButton_Click);
             // 
             // stopAnimationButton
             // 
-            this.stopAnimationButton.Location = new System.Drawing.Point(104, 381);
+            this.stopAnimationButton.Location = new System.Drawing.Point(104, 531);
             this.stopAnimationButton.Name = "stopAnimationButton";
             this.stopAnimationButton.Size = new System.Drawing.Size(59, 23);
             this.stopAnimationButton.TabIndex = 13;
             this.stopAnimationButton.Text = "Stop";
             this.stopAnimationButton.UseVisualStyleBackColor = true;
+            this.stopAnimationButton.Click += new System.EventHandler(this.stopAnimationButton_Click);
             // 
             // canvas
             // 
@@ -215,23 +190,64 @@
             this.visiblePolylineCheckbox.UseVisualStyleBackColor = true;
             this.visiblePolylineCheckbox.CheckedChanged += new System.EventHandler(this.visiblePolylineCheckbox_CheckedChanged);
             // 
+            // timer
+            // 
+            this.timer.Tick += new System.EventHandler(this.timer_Tick);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.naiveRotatingButton);
+            this.groupBox1.Controls.Add(this.filteringRotatingButton);
+            this.groupBox1.Location = new System.Drawing.Point(12, 304);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(200, 100);
+            this.groupBox1.TabIndex = 16;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Rotating";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.rotationAnimationButton);
+            this.groupBox2.Controls.Add(this.onCurveAnimation);
+            this.groupBox2.Location = new System.Drawing.Point(12, 410);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(200, 100);
+            this.groupBox2.TabIndex = 17;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Animation";
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.imageView);
+            this.groupBox3.Controls.Add(this.loadImageButton);
+            this.groupBox3.Location = new System.Drawing.Point(12, 178);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(200, 105);
+            this.groupBox3.TabIndex = 18;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Image";
+            // 
+            // imageView
+            // 
+            this.imageView.Location = new System.Drawing.Point(21, 31);
+            this.imageView.Name = "imageView";
+            this.imageView.Size = new System.Drawing.Size(50, 50);
+            this.imageView.TabIndex = 6;
+            this.imageView.TabStop = false;
+            this.imageView.Paint += new System.Windows.Forms.PaintEventHandler(this.imageView_Paint);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1184, 717);
+            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.visiblePolylineCheckbox);
             this.Controls.Add(this.canvas);
             this.Controls.Add(this.stopAnimationButton);
             this.Controls.Add(this.startAnimationButton);
-            this.Controls.Add(this.onCurveAnimation);
-            this.Controls.Add(this.rotationAnimationButton);
-            this.Controls.Add(this.animationLabel);
-            this.Controls.Add(this.filteringRotatingButton);
-            this.Controls.Add(this.naiveRotatingButton);
-            this.Controls.Add(this.rotatingLabel);
-            this.Controls.Add(this.loadImageButton);
-            this.Controls.Add(this.imageLabel);
             this.Controls.Add(this.generateBezierButton);
             this.Controls.Add(this.pointsNumberTextbox);
             this.Controls.Add(this.label1);
@@ -239,6 +255,12 @@
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.canvas)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.imageView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -250,19 +272,20 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox pointsNumberTextbox;
         private System.Windows.Forms.Button generateBezierButton;
-        private System.Windows.Forms.Label imageLabel;
-        private System.Windows.Forms.OpenFileDialog chooseImageDialog;
         private System.Windows.Forms.Button loadImageButton;
-        private System.Windows.Forms.Label rotatingLabel;
         private System.Windows.Forms.RadioButton naiveRotatingButton;
         private System.Windows.Forms.RadioButton filteringRotatingButton;
-        private System.Windows.Forms.Label animationLabel;
         private System.Windows.Forms.RadioButton rotationAnimationButton;
         private System.Windows.Forms.RadioButton onCurveAnimation;
         private System.Windows.Forms.Button startAnimationButton;
         private System.Windows.Forms.Button stopAnimationButton;
         private System.Windows.Forms.PictureBox canvas;
         private System.Windows.Forms.CheckBox visiblePolylineCheckbox;
+        private System.Windows.Forms.Timer timer;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.PictureBox imageView;
     }
 }
 

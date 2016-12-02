@@ -35,12 +35,15 @@ namespace BezierCurveImageAnimator.Polylines
             _focusedVertexIndex = NO_VERTEX;
         }
 
-        public void MoveVertex(MouseEventArgs e)
+        public bool MoveVertex(MouseEventArgs e)
         {
             if(_focusedVertexIndex != NO_VERTEX)
             {
                 _polyline[_focusedVertexIndex].Location = e.Location;
+                return true;
             }
+
+            return false;
         }
     }
 }

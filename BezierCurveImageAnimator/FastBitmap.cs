@@ -128,7 +128,10 @@ namespace BezierCurveImageAnimator
 
         public Bitmap GetBitmap()
         {
-            _Unlock();
+            if (_isLocked)
+            {
+                _Unlock();
+            }
 
             return _bitmap;
         }

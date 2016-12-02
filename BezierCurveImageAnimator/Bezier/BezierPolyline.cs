@@ -13,12 +13,23 @@ namespace BezierCurveImageAnimator.Bezier
 {
     public class BezierPolyline : Polyline
     {
-        private BezierCurve _bezierCurve;
         private const int CURVE_POINTS_NUMBER = 200;
+        private BezierCurve _bezierCurve;
+        private int _curvePointsNumber;
 
-        public BezierPolyline(int n, int canvasWidth, int canvasHeight)
+        public int CurvePointsNumber
+        {
+            get
+            {
+                return _curvePointsNumber;
+            }
+        }
+
+        public BezierPolyline(int n, int canvasWidth, int canvasHeight,
+                              int curvePointsNumber = CURVE_POINTS_NUMBER)
             : base(n, canvasWidth, canvasHeight)
         {
+            _curvePointsNumber = curvePointsNumber;
         }
 
         public BezierCurve GetBezierCurve()
@@ -26,7 +37,7 @@ namespace BezierCurveImageAnimator.Bezier
             if(_bezierCurve == null)
             {
                 _bezierCurve = new BezierCurve(this,
-                                               BezierPolyline.CURVE_POINTS_NUMBER);
+                                               _curvePointsNumber);
             }
 
             return _bezierCurve;

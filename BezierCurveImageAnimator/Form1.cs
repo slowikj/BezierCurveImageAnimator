@@ -6,25 +6,39 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Linq;
+using System.Drawing.Drawing2D;
 
 using BezierCurveImageAnimator.Bezier;
 using BezierCurveImageAnimator.Polylines;
+using BezierCurveImageAnimator.Animators;
+using BezierCurveImageAnimator.Rotators;
 
 namespace BezierCurveImageAnimator
 {
     public partial class Form1 : Form
     {
+        private const int _IMAGE_WIDTH = 200, _IMAGE_HEIGHT = 200;
+        private const int _DEFAULT_BEZIER_POLY_POINTS = 15;
+        private const int _MAX_POLYLINE_POINTS = 40;
+
         private BezierPolyline _polyline;
         private Pen _bezierPen;
+        private Animator _animator;
+        private ImageLoader _imageLoader;
+        private FastBitmap _image;
 
         public Form1()
         {
             InitializeComponent();
 
-            _polyline = new BezierPolyline(10, canvas.Width, canvas.Height);
-            _bezierPen = new Pen(Color.Black);         
+            _polyline = new BezierPolyline(_DEFAULT_BEZIER_POLY_POINTS,
+                                           canvas.Width, canvas.Height);
+            _bezierPen = new Pen(Color.Black);
+
+            _imageLoader = new ImageLoader(_IMAGE_WIDTH, _IMAGE_HEIGHT);
+            _SetImage(_imageLoader.GetDefaultImage());            
         }
-        
+   
         private void canvas_Paint(object sender, PaintEventArgs e)
         {
             FastBitmap fastBitmap = new FastBitmap(new Bitmap(canvas.Width, canvas.Height, e.Graphics), false);
@@ -37,21 +51,27 @@ namespace BezierCurveImageAnimator
 
             _DrawBezierCurve(_bezierPen, _polyline, paintTools);
             
-            paintTools.Graphics.DrawImage(paintTools.Bitmap.GetBitmap(), new Point(0, 0));
+            if(_animator != null)
+            {
+                _animator.Draw(paintTools);
+            }
+
+            paintTools.Graphics.DrawImage(paintTools.Bitmap.GetBitmap(),
+                                          new Point(0, 0));
         }
 
         private void _DrawBezierCurve(Pen pen, BezierPolyline polyline, PaintTools paintTools)
         {
             _polyline.GetBezierCurve()
                      .Draw(paintTools, pen);
-
-            PointD[] points = _polyline.GetPoints();
         }
 
         private void canvas_MouseMove(object sender, MouseEventArgs e)
         {
-            _polyline.GetMover().MoveVertex(e);
-            this.Repaint(canvas);
+            if (_polyline.GetMover().MoveVertex(e))
+            {
+                this.Repaint(canvas);
+            }
         }
         
         private void canvas_MouseDown(object sender, MouseEventArgs e)
@@ -68,8 +88,13 @@ namespace BezierCurveImageAnimator
         {
             try
             {
-                _polyline = new BezierPolyline(int.Parse(pointsNumberTextbox.Text),
-                                               canvas.Width, canvas.Height);
+                int n = int.Parse(pointsNumberTextbox.Text);
+                if(n > _MAX_POLYLINE_POINTS)
+                {
+                    throw new ArgumentException("the number should be <= 40");
+                }
+
+                _polyline = new BezierPolyline(n, canvas.Width, canvas.Height);
             }
             catch(ArgumentException exception)
             {
@@ -92,6 +117,57 @@ namespace BezierCurveImageAnimator
         {
             pictureBox.Invalidate();
             pictureBox.Update();
+        }
+
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            if(_animator != null)
+            {
+                _animator.Update();
+                this.Repaint(canvas);
+            }
+        }
+
+        private void startAnimationButton_Click(object sender, EventArgs e)
+        {
+            _animator = _GetAnimator();
+            timer.Enabled = true;
+        }
+
+        private Animator _GetAnimator()
+        {
+            //return new RotatingAnimator(_image, canvas.Width, canvas.Height);
+            return new BezierMoveAnimator(_image, _polyline);
+        }
+
+        private void stopAnimationButton_Click(object sender, EventArgs e)
+        {
+            timer.Enabled = false;
+        }
+
+        private void imageView_Paint(object sender, PaintEventArgs e)
+        {
+            if(_image != null)
+            {
+                e.Graphics.DrawImage(new Bitmap(_image.GetBitmap(), imageView.Width, imageView.Height),
+                                     0, 0);
+            }
+        }
+
+        private void loadImageButton_Click(object sender, EventArgs e)
+        {
+            _SetImage(_imageLoader.GetImage());
+
+            this.Repaint(canvas);
+            this.Repaint(imageView);
+        }
+
+        private void _SetImage(Bitmap image)
+        {
+            if (image != null)
+            {
+                _image = new FastBitmap(image);
+            }
         }
     }
 }

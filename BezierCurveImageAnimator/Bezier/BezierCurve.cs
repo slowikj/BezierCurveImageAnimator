@@ -42,15 +42,15 @@ namespace BezierCurveImageAnimator.Bezier
                                              (a, b) => _GetDerivativeBt(a, b));
         }
 
-        public PointD GetPoint(int index)
+        public Point GetPoint(int index)
         {
             PointD[] points = _polyline.GetPoints();
 
-            return _bezierFactors[index].Zip(points, (b, point) => point * b)
-                                        .Aggregate((a, b) => a + b);
+            return (Point)_bezierFactors[index].Zip(points, (b, point) => point * b)
+                                               .Aggregate((a, b) => a + b);
         }
         
-        public FreeVector GetNormalVector(int index)
+        public FreeVector GetTangentVector(int index)
         {
             IEnumerable<PointD> pointsDifferences = _GetNeighbourPointsDifferences(_polyline.GetPoints());
 
@@ -71,21 +71,7 @@ namespace BezierCurveImageAnimator.Bezier
                 paintTools.Graphics.DrawLine(pen,
                                              (Point)this.GetPoint(i),
                                              (Point)this.GetPoint(i + 1));
-            }
-
-            for(int i = 10; i < _curvePointsNumber - 1; i += 30)
-            {
-                Vertex a = new Vertex((Point)this.GetPoint(i), Color.Green);
-                a.Draw(paintTools);
-
-                FreeVector v = this.GetNormalVector(i);
-                v.Length = 100;
-
-                paintTools.Graphics.DrawLine(new Pen(Color.Red),
-                                             (Point)this.GetPoint(i),
-                                             (Point)(this.GetPoint(i) + v));
-            }
-                
+            }   
         }
 
         private double[][] _GetFactors(int curvePointsNumber, int polylinePoints,
@@ -102,9 +88,9 @@ namespace BezierCurveImageAnimator.Bezier
             return res;
         }
 
-        private double[] _GetDerivativeBt(double t, int polylinePoints)
+        private double[] _GetDerivativeBt(double t, int polylinePointsNumber)
         {
-            int n = polylinePoints;
+            int n = polylinePointsNumber;
 
             double[] res = _GetBt(t, n - 1);
             for(int i = 0;  i < res.Length; ++i)

@@ -6,7 +6,16 @@ using System.Threading.Tasks;
 
 namespace BezierCurveImageAnimator.Rotators
 {
-    class FilteringRotator
+    public class FilteringRotator : Rotator
     {
+        public FilteringRotator(FastBitmap image)
+            : base(image)
+        {
+        }
+
+        public override PixelSet GetRotated(float angle)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
