@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Animators\Animator.cs" />
+    <Compile Include="Animators\AnimatorCreator.cs" />
     <Compile Include="Animators\BezierMoveAnimator.cs" />
     <Compile Include="Animators\SpinningAnimator.cs" />
     <Compile Include="Bezier\BezierCurve.cs" />

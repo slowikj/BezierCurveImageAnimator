@@ -26,6 +26,7 @@ namespace BezierCurveImageAnimator
         private Animator _animator;
         private ImageLoader _imageLoader;
         private FastBitmap _image;
+        private AnimatorCreator _animatorCreator;
 
         public Form1()
         {
@@ -35,8 +36,10 @@ namespace BezierCurveImageAnimator
                                            canvas.Width, canvas.Height);
             _bezierPen = new Pen(Color.Black);
 
+            _animatorCreator = new AnimatorCreator(_image, _polyline, canvas.Width, canvas.Height);
+
             _imageLoader = new ImageLoader(_IMAGE_WIDTH, _IMAGE_HEIGHT);
-            _SetImage(_imageLoader.GetDefaultImage());            
+            _SetImage(_imageLoader.GetDefaultImage());
         }
    
         private void canvas_Paint(object sender, PaintEventArgs e)
@@ -95,6 +98,8 @@ namespace BezierCurveImageAnimator
                 }
 
                 _polyline = new BezierPolyline(n, canvas.Width, canvas.Height);
+
+                _animatorCreator.SetPolyline(_polyline);
             }
             catch(ArgumentException exception)
             {
@@ -104,7 +109,7 @@ namespace BezierCurveImageAnimator
             {
                 MessageBox.Show("Incorrect format");
             }
-
+            
             this.Repaint(canvas);
         }
         
@@ -130,14 +135,8 @@ namespace BezierCurveImageAnimator
 
         private void startAnimationButton_Click(object sender, EventArgs e)
         {
-            _animator = _GetAnimator();
+            _animator = _animatorCreator.Get();
             timer.Enabled = true;
-        }
-
-        private Animator _GetAnimator()
-        {
-            //return new RotatingAnimator(_image, canvas.Width, canvas.Height);
-            return new BezierMoveAnimator(_image, _polyline);
         }
 
         private void stopAnimationButton_Click(object sender, EventArgs e)
@@ -162,11 +161,44 @@ namespace BezierCurveImageAnimator
             this.Repaint(imageView);
         }
 
+        private void naiveRotatingButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if(naiveRotatingButton.Checked)
+            {
+                _animatorCreator.SetRotator(RotatorType.Naive);
+            }
+        }
+
+        private void filteringRotatingButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if(filteringRotatingButton.Checked)
+            {
+                _animatorCreator.SetRotator(RotatorType.WithFiltering);
+            }
+        }
+
+        private void rotationAnimationButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if(rotationAnimationButton.Checked)
+            {
+                _animatorCreator.SetAnimator(AnimatorType.Spinning);
+            }
+        }
+
+        private void onCurveAnimation_CheckedChanged(object sender, EventArgs e)
+        {
+            if(onCurveAnimation.Checked)
+            {
+                _animatorCreator.SetAnimator(AnimatorType.Bezier);
+            }
+        }
+
         private void _SetImage(Bitmap image)
         {
             if (image != null)
             {
                 _image = new FastBitmap(image);
+                _animatorCreator.SetImage(_image);
             }
         }
     }

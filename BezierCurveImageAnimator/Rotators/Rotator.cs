@@ -9,6 +9,8 @@ using System.Linq;
 
 namespace BezierCurveImageAnimator.Rotators
 {
+    public enum RotatorType { Naive, WithFiltering };
+
     public abstract class Rotator
     {
         protected FastBitmap _image;

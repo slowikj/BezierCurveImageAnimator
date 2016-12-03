@@ -25,7 +25,7 @@ namespace BezierCurveImageAnimator
             this.Locations = locations;
             this.Colors = colors;
         }
-
+        
         private Color[] _GetInitialColors(FastBitmap image)
         {
             int width = image.Width;

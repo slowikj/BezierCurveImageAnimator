@@ -11,6 +11,8 @@ using BezierCurveImageAnimator.Rotators;
 
 namespace BezierCurveImageAnimator.Animators
 {
+    public enum AnimatorType { Bezier, Spinning };
+
     public abstract class Animator
     {
         private Dictionary<string, Rotator> _rotators;
@@ -21,18 +23,18 @@ namespace BezierCurveImageAnimator.Animators
         {
             _rotators = _GetRotators(image);
 
-            this.SetRotator("Naive");
+            this.SetRotator(RotatorType.Naive);
         }
 
         public abstract void Update();
         public abstract void Draw(PaintTools paintTools);        
 
-        public void SetRotator(string name)
+        public void SetRotator(RotatorType rotatorType)
         {
-            switch (name)
+            switch (rotatorType)
             {
-                case "Naive": _rotator = _rotators["Naive"]; break;
-                case "WithFiltering": _rotator = _rotators["WithFiltering"]; break;
+                case RotatorType.Naive: _rotator = _rotators["Naive"]; break;
+                case RotatorType.WithFiltering: _rotator = _rotators["WithFiltering"]; break;
                 default: throw new ArgumentException("Bad rotator");
             }
         }

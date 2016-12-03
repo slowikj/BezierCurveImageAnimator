@@ -111,6 +111,7 @@
             this.naiveRotatingButton.TabStop = true;
             this.naiveRotatingButton.Text = "Naive";
             this.naiveRotatingButton.UseVisualStyleBackColor = true;
+            this.naiveRotatingButton.CheckedChanged += new System.EventHandler(this.naiveRotatingButton_CheckedChanged);
             // 
             // filteringRotatingButton
             // 
@@ -121,6 +122,7 @@
             this.filteringRotatingButton.TabIndex = 8;
             this.filteringRotatingButton.Text = "With filtering";
             this.filteringRotatingButton.UseVisualStyleBackColor = true;
+            this.filteringRotatingButton.CheckedChanged += new System.EventHandler(this.filteringRotatingButton_CheckedChanged);
             // 
             // rotationAnimationButton
             // 
@@ -133,6 +135,7 @@
             this.rotationAnimationButton.TabStop = true;
             this.rotationAnimationButton.Text = "Rotation";
             this.rotationAnimationButton.UseVisualStyleBackColor = true;
+            this.rotationAnimationButton.CheckedChanged += new System.EventHandler(this.rotationAnimationButton_CheckedChanged);
             // 
             // onCurveAnimation
             // 
@@ -143,6 +146,7 @@
             this.onCurveAnimation.TabIndex = 11;
             this.onCurveAnimation.Text = "Moving on the curve";
             this.onCurveAnimation.UseVisualStyleBackColor = true;
+            this.onCurveAnimation.CheckedChanged += new System.EventHandler(this.onCurveAnimation_CheckedChanged);
             // 
             // startAnimationButton
             // 
