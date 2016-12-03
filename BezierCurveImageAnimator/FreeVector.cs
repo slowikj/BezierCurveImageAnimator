@@ -157,5 +157,11 @@ namespace BezierCurveImageAnimator
         {
             return new PointD(a.X + p.X, a.Y + p.Y);
         }
+
+        public float GetAngleWith(FreeVector other)
+        {
+            return (float)Vector.AngleBetween(new Vector(this.X, this.Y),
+                                              new Vector(other.X, other.Y));
+        }
     }
 }

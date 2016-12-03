@@ -9,13 +9,13 @@ using System.Linq;
 
 namespace BezierCurveImageAnimator.Animators
 {
-    public class RotatingAnimator : Animator
+    public class SpinningAnimator : Animator
     {
         private const int _DEFAULT_ANGLE = 10;
         private int _currentAngle;
         private FreeVector _moveVector;
         
-        public RotatingAnimator(FastBitmap image, int canvasWidth, int canvasHeight)
+        public SpinningAnimator(FastBitmap image, int canvasWidth, int canvasHeight)
             : base(image)
         {
             _currentAngle = 0;

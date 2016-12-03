@@ -33,12 +33,11 @@ namespace BezierCurveImageAnimator.Animators
             FreeVector tangentVector = bezierCurve.GetTangentVector(_bezierPointNumber);
             Point curvePoint = bezierCurve.GetPoint(_bezierPointNumber);
 
-            double tangens = tangentVector.Y / tangentVector.X;
-            float angle = (float)(Math.Atan(tangens) * 180 / Math.PI);
+            float angle = (new FreeVector(new Point(1,0))).GetAngleWith(tangentVector);
             PixelSet points = _rotator.GetRotated(angle);
             FreeVector translateVector = new FreeVector(_imageMiddle, curvePoint);
             
-            for(int i = 0; i< points.Locations.Length; ++i)
+            for(int i = 0; i < points.Locations.Length; ++i)
             {
                 Point translatedPoint = (Point)(points.Locations[i] + translateVector);
                 paintTools.Bitmap.SetPixel(translatedPoint.X, translatedPoint.Y, points.Colors[i]);
