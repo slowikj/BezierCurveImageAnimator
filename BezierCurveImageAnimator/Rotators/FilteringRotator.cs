@@ -8,12 +8,11 @@ namespace BezierCurveImageAnimator.Rotators
 {
     public class FilteringRotator : Rotator
     {
-        public FilteringRotator(FastBitmap image)
-            : base(image)
+        public FilteringRotator()
         {
         }
 
-        public override PixelSet GetRotated(float angle)
+        public override PixelSet GetRotated(PixelSet pixelSet, float angle)
         {
             throw new NotImplementedException();
         }

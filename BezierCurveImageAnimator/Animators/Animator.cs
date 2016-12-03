@@ -16,12 +16,13 @@ namespace BezierCurveImageAnimator.Animators
     public abstract class Animator
     {
         private Dictionary<string, Rotator> _rotators;
+        protected PixelSet _pixelSet;
         
-        protected Rotator _rotator;
-
         public Animator(FastBitmap image)
         {
             _rotators = _GetRotators(image);
+
+            _pixelSet = new PixelSet(image);
 
             this.SetRotator(RotatorType.Naive);
         }
@@ -33,8 +34,8 @@ namespace BezierCurveImageAnimator.Animators
         {
             switch (rotatorType)
             {
-                case RotatorType.Naive: _rotator = _rotators["Naive"]; break;
-                case RotatorType.WithFiltering: _rotator = _rotators["WithFiltering"]; break;
+                case RotatorType.Naive: _pixelSet._rotator = _rotators["Naive"]; break;
+                case RotatorType.WithFiltering: _pixelSet._rotator = _rotators["WithFiltering"]; break;
                 default: throw new ArgumentException("Bad rotator");
             }
         }
@@ -43,8 +44,8 @@ namespace BezierCurveImageAnimator.Animators
         {
             Dictionary<string, Rotator> res = new Dictionary<string, Rotator>();
             
-            res["Naive"] = new NaiveRotator(image);
-            res["WithFiltering"] = new FilteringRotator(image);
+            res["Naive"] = new NaiveRotator();
+            res["WithFiltering"] = new FilteringRotator();
 
             return res;
         }

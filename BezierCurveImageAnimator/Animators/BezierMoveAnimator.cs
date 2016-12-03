@@ -34,11 +34,11 @@ namespace BezierCurveImageAnimator.Animators
             Point curvePoint = bezierCurve.GetPoint(_bezierPointNumber);
 
             float angle = (new FreeVector(new Point(1,0))).GetAngleWith(tangentVector);
-            PixelSet points = _rotator.GetRotated(angle);
+            PixelSet rotatedObject = _pixelSet.GetRotated(angle);
             FreeVector translateVector = new FreeVector(_imageMiddle, curvePoint);
-            points.Translate(translateVector);
+            rotatedObject.Translate(translateVector);
 
-            points.Draw(paintTools);
+            rotatedObject.Draw(paintTools);
         }
 
         public override void Update()

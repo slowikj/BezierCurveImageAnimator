@@ -14,41 +14,31 @@ namespace BezierCurveImageAnimator.Rotators
 {
     public class NaiveRotator : Rotator
     {
-        public NaiveRotator(FastBitmap image)
-            : base(image)
+        public NaiveRotator()
         {
         }
 
-        public override PixelSet GetRotated(float angle)
+        public override PixelSet GetRotated(PixelSet pixelSet, float angle)
         {
-            //PixelSet res = new PixelSet(_image);
-
-            //_rotationMatrix.Reset();
-            //_rotationMatrix.RotateAt(angle, _middleIndex);
-
-            //_rotationMatrix.TransformPoints(res.Locations);
-
-            //return res;
-
-            Point[] rotatedCorners = _GetRotatedCorners(angle);
-            Point[] rotatedPoints = (new PolygonPointsGenerator(rotatedCorners)).GetPoints();
-            Point[] initialPoints = _GetInitialPoints(angle, rotatedPoints);
+            Point[] corners = _GetRotatedCorners(pixelSet._corners, pixelSet._middle, angle);
+            Point[] rotatedPoints = (new PolygonPointsGenerator(corners)).GetPoints();
+            Point[] initialPoints = _GetInitialPoints(angle, rotatedPoints, pixelSet._middle);
 
             Color[] colors = new Color[initialPoints.Length];
-            for (int i = 0; i < initialPoints.Length; ++i)
+            for (int i = 0; i < rotatedPoints.Length; ++i)
             {
-                colors[i] = _image.GetPixel(initialPoints[i].X, initialPoints[i].Y);
+                colors[i] = pixelSet.GetPixel(initialPoints[i].X, initialPoints[i].Y);
             }
 
-            return new PixelSet(rotatedPoints, colors, _middlePoint, rotatedCorners);
+            return new PixelSet(rotatedPoints, colors, pixelSet._middle, corners);
         }
 
-        private Point[] _GetInitialPoints(float angle, Point[] rotatedPoints)
+        private Point[] _GetInitialPoints(float angle, Point[] rotatedPoints, Point middlePoint)
         {
             Point[] res = (Point[])rotatedPoints.Clone();
             Matrix reversedRotationMatrix = new Matrix();
 
-            reversedRotationMatrix.RotateAt(angle, _middlePoint);
+            reversedRotationMatrix.RotateAt(angle, middlePoint);
             reversedRotationMatrix.Invert();
             
             reversedRotationMatrix.TransformPoints(res);
@@ -56,22 +46,14 @@ namespace BezierCurveImageAnimator.Rotators
             return res;
         }
 
-        private Point[] _GetRotatedCorners(float angle)
+        private Point[] _GetRotatedCorners(Point[] corners, Point middlePoint, float angle)
         {
-            Point[] res = _GetRectangleCorners();
+            Point[] res = (Point[])corners.Clone();
             Matrix rotationMatrix = new Matrix();
-            rotationMatrix.RotateAt(angle, _middlePoint);
+            rotationMatrix.RotateAt(angle, middlePoint);
             rotationMatrix.TransformPoints(res);
 
             return res;
-        }
-
-        private Point[] _GetRectangleCorners()
-        {
-            return new Point[] {new Point(0, 0),
-                                new Point(0, _image.Height),
-                                new Point(_image.Width, _image.Height),
-                                new Point(_image.Width, 0)};
         }
     }
 }

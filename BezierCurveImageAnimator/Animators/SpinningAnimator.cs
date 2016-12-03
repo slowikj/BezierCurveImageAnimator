@@ -20,14 +20,13 @@ namespace BezierCurveImageAnimator.Animators
         {
             _currentAngle = 0;
             _moveVector = _GetMoveVectorToCenter(image, canvasHeight, canvasHeight);
+            _pixelSet.Translate(_moveVector);
         }
 
         public override void Draw(PaintTools paintTools)
         {
-            PixelSet pixels = _rotator.GetRotated(_currentAngle);
-            pixels.Translate(_moveVector);
-
-            pixels.Draw(paintTools);
+            PixelSet rotatedObject = _pixelSet.GetRotated(_currentAngle);
+            rotatedObject.Draw(paintTools);
         }
 
         public override void Update()

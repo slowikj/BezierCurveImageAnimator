@@ -7,19 +7,25 @@ using System.Text;
 using System.Windows.Forms;
 using System.Linq;
 
+using BezierCurveImageAnimator.Rotators.Polygon;
+using BezierCurveImageAnimator.Rotators;
+
 namespace BezierCurveImageAnimator
 {
     public class PixelSet
     {
-        private Dictionary<Point, Color> _pixels;
-        private Point[] _corners;
-        private Point _middle;
+        public Dictionary<Point, Color> _pixels { get; set; }
+        public Point[] _corners { get; set; }
+        public Point _middle { get; set; }
+        public Rotator _rotator;
 
         public PixelSet(FastBitmap image)
         {
             _pixels = _GetPixels(image);
             _corners = _GetCorners(image);
             _middle = _GetMiddle(image);
+
+            _rotator = new NaiveRotator();
         }
 
         public PixelSet(Point[] points, Color[] colors, Point middle, Point[] corners)
@@ -36,6 +42,18 @@ namespace BezierCurveImageAnimator
             _TranslateMiddle(v);
         }
 
+        public Color GetPixel(int x, int y)
+        {
+            Point p = new Point(x, y);
+            return _pixels.ContainsKey(p) ? _pixels[p]
+                                          : Color.Black;
+        }
+
+        public PixelSet GetRotated(float angle)
+        {
+            return _rotator.GetRotated(this, angle);
+        }
+        
         public void Draw(PaintTools paintTools)
         {
             foreach(var pixel in _pixels)
