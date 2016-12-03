@@ -29,8 +29,9 @@ namespace BezierCurveImageAnimator.Rotators
             //_rotationMatrix.TransformPoints(res.Locations);
 
             //return res;
-            
-            Point[] rotatedPoints = (new PolygonPointsGenerator(_GetRotatedCorners(angle))).GetPoints();
+
+            Point[] rotatedCorners = _GetRotatedCorners(angle);
+            Point[] rotatedPoints = (new PolygonPointsGenerator(rotatedCorners)).GetPoints();
             Point[] initialPoints = _GetInitialPoints(angle, rotatedPoints);
 
             Color[] colors = new Color[initialPoints.Length];
@@ -39,7 +40,7 @@ namespace BezierCurveImageAnimator.Rotators
                 colors[i] = _image.GetPixel(initialPoints[i].X, initialPoints[i].Y);
             }
 
-            return new PixelSet(rotatedPoints, colors);
+            return new PixelSet(rotatedPoints, colors, _middlePoint, rotatedCorners);
         }
 
         private Point[] _GetInitialPoints(float angle, Point[] rotatedPoints)
