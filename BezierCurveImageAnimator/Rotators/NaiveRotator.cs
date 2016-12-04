@@ -64,13 +64,5 @@ namespace BezierCurveImageAnimator.Rotators
 
             return res;
         }
-
-        private Point[] _GetRectangleCorners()
-        {
-            return new Point[] {new Point(0, 0),
-                                new Point(0, _image.Height),
-                                new Point(_image.Width, _image.Height),
-                                new Point(_image.Width, 0)};
-        }
     }
 }

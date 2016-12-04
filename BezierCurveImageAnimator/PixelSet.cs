@@ -33,11 +33,12 @@ namespace BezierCurveImageAnimator
             int length = width * height;
             Color[] res = new Color[length];
 
+            int cnt = 0;
             for (int i = 0; i < height; ++i)
             {
-                for (int j = 0; j < width; ++j)
+                for (int j = width - 1; j >= 0; --j)
                 {
-                    res[i * width + j] = image.GetPixel(i, j);
+                    res[cnt++] = image.GetPixel(i, j);
                 }
             }
 
@@ -49,11 +50,12 @@ namespace BezierCurveImageAnimator
             int length = width * height;
             Point[] res = new Point[length];
 
+            int cnt = 0;
             for (int i = 0; i < height; ++i)
             {
-                for (int j = 0; j < width; ++j)
+                for (int j = width - 1; j >= 0; --j)
                 {
-                    res[i * width + j] = new Point(i, j);
+                    res[cnt++] = new Point(i, j);
                 }
             }
 
