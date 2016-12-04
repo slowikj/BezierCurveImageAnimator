@@ -14,13 +14,13 @@ namespace BezierCurveImageAnimator.Rotators
     public abstract class Rotator
     {
         protected FastBitmap _image;
-        protected PointF _middlePoint;
+        protected Point _middlePoint;
 
-        public Rotator(FastBitmap image)
+        public Rotator(FastBitmap image, Point? middle = null)
         {
             _image = image;
-
-            _middlePoint = new PointF(image.Width / 2, image.Height / 2);
+            
+            _middlePoint = middle.HasValue ? middle.Value : new Point(image.Width / 2, image.Height / 2);
         }
         
         public abstract PixelSet GetRotated(float angle);

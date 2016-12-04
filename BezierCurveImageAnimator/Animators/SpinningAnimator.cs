@@ -25,7 +25,7 @@ namespace BezierCurveImageAnimator.Animators
         public override void Draw(PaintTools paintTools)
         {
             PixelSet pixels = _rotator.GetRotated(_currentAngle);
-            
+
             for(int i = 0; i < pixels.Locations.Length; ++i)
             {
                 Point translatedPoint = (Point)(pixels.Locations[i] + _moveVector);

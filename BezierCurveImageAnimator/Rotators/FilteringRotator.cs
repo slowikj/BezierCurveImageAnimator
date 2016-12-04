@@ -14,31 +14,33 @@ namespace BezierCurveImageAnimator.Rotators
 {
     public class FilteringRotator : Rotator
     {
-        public FilteringRotator(FastBitmap image)
-            : base(image)
+        private Action<Dictionary<int, List<KeyValuePair<int, Color>>>, int, int, Color> _addItemWithKeyX;
+        private Action<Dictionary<int, List<KeyValuePair<int, Color>>>, int, int, Color> _addItemWithKeyY;
+
+        public FilteringRotator(FastBitmap image, Point? middle = null)
+            : base(image, middle)
         {
+            _addItemWithKeyX = (d, x, y, color) => _AddPixel(d, x, new KeyValuePair<int, Color>(y, color));
+            _addItemWithKeyY = (d, x, y, color) => _AddPixel(d, y, new KeyValuePair<int, Color>(x, color));
         }
 
         public override PixelSet GetRotated(float angle)
         {
-            Dictionary<int, List<KeyValuePair<int, Color>>> r = _GetDictionary(_image);
-
-            double radiansAngle = (angle * Math.PI / 180);
-            double deg90rad = Math.PI / 2;
-            double yShear90 = Math.Sin(deg90rad);
-            double xShear90 = -Math.Tan(deg90rad / 2);
-
-            while (radiansAngle >= deg90rad)
+            int multiply90 = 0;
+            while (angle > 90)
             {
-                r = _Rotate(xShear90, yShear90, r);
-
-                radiansAngle -= deg90rad;
+                ++multiply90;
+                angle -= 90;
             }
 
+            Dictionary<int, List<KeyValuePair<int, Color>>> r = _Rotate90(multiply90);
+
+            double radiansAngle = (angle * Math.PI / 180);
             double xShear = -Math.Tan(radiansAngle / 2);
             double yShear = Math.Sin(radiansAngle);
+
             r = _Rotate(xShear, yShear, r);
-            
+
             List<Point> points = new List<Point>();
             List<Color> colors = new List<Color>();
             foreach (var entry in r)
@@ -54,12 +56,47 @@ namespace BezierCurveImageAnimator.Rotators
             return new PixelSet(points.ToArray(), colors.ToArray());
         }
 
+        private Dictionary<int, List<KeyValuePair<int, Color>>> _Rotate90(int multiply)
+        {
+            int angle = 90 * multiply;
+            var res = new Dictionary<int, List<KeyValuePair<int, Color>>>();
+
+            Matrix matrix = new Matrix();
+            matrix.RotateAt(angle, _middlePoint);
+
+            int imageSize = (_image.Width) * (_image.Height);
+            Point[] points = new Point[imageSize];
+            Color[] colors = new Color[imageSize];
+            for (int y = 0; y < _image.Height; ++y)
+            {
+                for (int x = 0; x < _image.Width; ++x)
+                {
+                    int index = y * _image.Height + x;
+                    points[index] = new Point(x, y);
+                    colors[index] = _image.GetPixel(x, y);
+                }
+            }
+
+            matrix.TransformPoints(points);
+
+            for (int i = 0; i < points.Length; ++i)
+            {
+                if (!res.ContainsKey(points[i].Y))
+                {
+                    res.Add(points[i].Y, new List<KeyValuePair<int, Color>>());
+                }
+                res[points[i].Y].Add(new KeyValuePair<int, Color>(points[i].X, colors[i]));
+            }
+
+            return res;
+        }
+
         private Dictionary<int, List<KeyValuePair<int, Color>>> _Rotate(double xShear, double yShear,
                                    Dictionary<int, List<KeyValuePair<int, Color>>> r) // angle must be <= 90 deg!
         {
-            var a = _XShear(r, xShear);
-            var b = _YShear(a, yShear);
-            var c = _XShear2(b, xShear);
+            var a = _XShear(r, xShear, _addItemWithKeyX);
+            var b = _YShear(a, yShear, _addItemWithKeyY);
+            var c = _XShear(b, xShear, _addItemWithKeyY);
 
             return c;
         }
@@ -97,22 +134,21 @@ namespace BezierCurveImageAnimator.Rotators
         //    return res;
         //}
 
-        
-
-        private Dictionary<int, List<KeyValuePair<int, Color>>> _XShear(Dictionary<int, List<KeyValuePair<int, Color>>> bitmap,
-                                                                       double shear)
+        private Dictionary<int, List<KeyValuePair<int, Color>>> _XShear(Dictionary<int, List<KeyValuePair<int, Color>>> dic,
+                         double shear,
+                         Action<Dictionary<int, List<KeyValuePair<int, Color>>>, int, int, Color> addElem)
         {
             var res = new Dictionary<int, List<KeyValuePair<int, Color>>>();
 
-            foreach (int y in bitmap.Keys)
+            foreach (int y in dic.Keys)
             {
-                bitmap[y].Sort((a, b) => a.Key - b.Key);
-                double skew = shear * (y + 0.5);
+                dic[y].Sort((a, b) => b.Key - a.Key);
+                double skew = shear * (y - _middlePoint.Y + 0.5);
                 int skewl = (int)Math.Floor(skew);
                 double skewf = Math.Abs(skew % 1);
                 
                 Color oleft = Color.FromArgb(0);
-                foreach (KeyValuePair<int, Color> elem in bitmap[y])
+                foreach (KeyValuePair<int, Color> elem in dic[y])
                 {
                     Color pixel = elem.Value;
                     Color left = Color.FromArgb((byte)(pixel.A * skewf),
@@ -124,31 +160,31 @@ namespace BezierCurveImageAnimator.Rotators
                                             pixel.R - left.R + oleft.R,
                                             pixel.G - left.G + oleft.G,
                                             pixel.B - left.B + oleft.B);
-
-                    _AddPixel(res, elem.Key + skewl, new KeyValuePair<int, Color>(y, pixel));
+                    
+                    addElem(res, elem.Key + skewl, y, pixel);
 
                     oleft = left;
                 }
-                _AddPixel(res, bitmap[y][0].Key + skewl, new KeyValuePair<int, Color>(y, oleft));
             }
 
             return res;
         }
-
-        private Dictionary<int, List<KeyValuePair<int, Color>>> _XShear2(Dictionary<int, List<KeyValuePair<int, Color>>> bitmap,
-                                                                       double shear)
+        
+        private Dictionary<int, List<KeyValuePair<int, Color>>> _YShear(Dictionary<int, List<KeyValuePair<int, Color>>> dic,
+                   double shear,
+                   Action<Dictionary<int, List<KeyValuePair<int, Color>>>, int, int, Color> addElem)
         {
             var res = new Dictionary<int, List<KeyValuePair<int, Color>>>();
 
-            foreach (int y in bitmap.Keys)
+            foreach (int x in dic.Keys)
             {
-                bitmap[y].Sort((a, b) => a.Key - b.Key);
-                double skew = shear * (y + 0.5);
+                dic[x].Sort((a, b) => b.Key - a.Key);
+                double skew = shear * (x - _middlePoint.X + 0.5);
                 int skewl = (int)Math.Floor(skew);
                 double skewf = Math.Abs(skew % 1);
 
                 Color oleft = Color.FromArgb(0);
-                foreach (KeyValuePair<int, Color> elem in bitmap[y])
+                foreach (KeyValuePair<int, Color> elem in dic[x])
                 {
                     Color pixel = elem.Value;
                     Color left = Color.FromArgb((byte)(pixel.A * skewf),
@@ -160,49 +196,11 @@ namespace BezierCurveImageAnimator.Rotators
                                             pixel.R - left.R + oleft.R,
                                             pixel.G - left.G + oleft.G,
                                             pixel.B - left.B + oleft.B);
-
-                    _AddPixel(res, y, new KeyValuePair<int, Color>(elem.Key + skewl, pixel));
-
+                    
+                    addElem(res, x, elem.Key + skewl, pixel);
+                    
                     oleft = left;
                 }
-                _AddPixel(res, y, new KeyValuePair<int, Color>(bitmap[y][0].Key + skewl, oleft));
-            }
-
-            return res;
-        }
-
-        private Dictionary<int, List<KeyValuePair<int, Color>>> _YShear(Dictionary<int, List<KeyValuePair<int, Color>>> bitmap,
-                                                                      double shear)
-        {
-            var res = new Dictionary<int, List<KeyValuePair<int, Color>>>();
-
-            foreach (int x in bitmap.Keys)
-            {
-                bitmap[x].Sort((a, b) => a.Key - b.Key);
-                double skew = shear * (x + 0.5);
-                int skewl = (int)Math.Floor(skew);
-                double skewf = Math.Abs(skew % 1);
-
-                Color oleft = Color.FromArgb(0);
-                foreach (KeyValuePair<int, Color> elem in bitmap[x])
-                {
-                    Color pixel = elem.Value;
-                    Color left = Color.FromArgb((byte)(pixel.A * skewf),
-                                                (byte)(pixel.R * skewf),
-                                                (byte)(pixel.G * skewf),
-                                                (byte)(pixel.B * skewf));
-
-                    pixel = Color.FromArgb(pixel.A - left.A + oleft.A,
-                                            pixel.R - left.R + oleft.R,
-                                            pixel.G - left.G + oleft.G,
-                                            pixel.B - left.B + oleft.B);
-
-                    _AddPixel(res, elem.Key + skewl, new KeyValuePair<int, Color>(x, pixel));
-
-                    oleft = left;
-                }
-
-                _AddPixel(res, bitmap[x][0].Key + skewl, new KeyValuePair<int, Color>(x, oleft));
             }
 
             return res;

@@ -14,8 +14,8 @@ namespace BezierCurveImageAnimator.Rotators
 {
     public class NaiveRotator : Rotator
     {
-        public NaiveRotator(FastBitmap image)
-            : base(image)
+        public NaiveRotator(FastBitmap image, Point? middle = null)
+            : base(image, middle)
         {
         }
 
