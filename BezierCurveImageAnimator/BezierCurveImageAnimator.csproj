@@ -64,7 +64,6 @@
     <Compile Include="FreeVector.cs" />
     <Compile Include="ImageLoader.cs" />
     <Compile Include="PaintTools.cs" />
-    <Compile Include="ColorExtensions.cs" />
     <Compile Include="PixelSet.cs" />
     <Compile Include="PointD.cs" />
     <Compile Include="Polylines\Polyline.cs" />
@@ -104,6 +103,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\chessboard.jpg" />
     <Content Include="Resources\wild_cat.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

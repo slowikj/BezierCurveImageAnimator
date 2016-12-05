@@ -11,7 +11,7 @@ namespace BezierCurveImageAnimator
 {
     public class ImageLoader
     {
-        private const string _DEFAULT_IMAGE_PATH = "..\\..\\Resources\\wild_cat.jpg";
+        private const string _DEFAULT_IMAGE_PATH = "..\\..\\Resources\\chessboard.jpg";
         private int _width, _height;
 
         public ImageLoader(int width, int height)
