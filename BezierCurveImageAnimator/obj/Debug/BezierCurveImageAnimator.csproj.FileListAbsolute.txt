@@ -1,9 +1,0 @@
-C:\Users\slowik\Documents\studia\grafika\projekty\projekt3\BezierCurveImageAnimator\BezierCurveImageAnimator\bin\Debug\BezierCurveImageAnimator.exe
-C:\Users\slowik\Documents\studia\grafika\projekty\projekt3\BezierCurveImageAnimator\BezierCurveImageAnimator\bin\Debug\BezierCurveImageAnimator.pdb
-C:\Users\slowik\Documents\studia\grafika\projekty\projekt3\BezierCurveImageAnimator\BezierCurveImageAnimator\obj\Debug\BezierCurveImageAnimator.csprojResolveAssemblyReference.cache
-C:\Users\slowik\Documents\studia\grafika\projekty\projekt3\BezierCurveImageAnimator\BezierCurveImageAnimator\obj\Debug\BezierCurveImageAnimator.Form1.resources
-C:\Users\slowik\Documents\studia\grafika\projekty\projekt3\BezierCurveImageAnimator\BezierCurveImageAnimator\obj\Debug\BezierCurveImageAnimator.Properties.Resources.resources
-C:\Users\slowik\Documents\studia\grafika\projekty\projekt3\BezierCurveImageAnimator\BezierCurveImageAnimator\obj\Debug\BezierCurveImageAnimator.csproj.GenerateResource.Cache
-C:\Users\slowik\Documents\studia\grafika\projekty\projekt3\BezierCurveImageAnimator\BezierCurveImageAnimator\obj\Debug\BezierCurveImageAnimator.exe
-C:\Users\slowik\Documents\studia\grafika\projekty\projekt3\BezierCurveImageAnimator\BezierCurveImageAnimator\obj\Debug\BezierCurveImageAnimator.pdb
-C:\Users\slowik\Documents\studia\grafika\projekty\projekt3\BezierCurveImageAnimator\BezierCurveImageAnimator\bin\Debug\BezierCurveImageAnimator.exe.config

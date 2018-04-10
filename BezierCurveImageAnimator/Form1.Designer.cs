@@ -46,7 +46,10 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.grayColorCheckbox = new System.Windows.Forms.CheckBox();
             this.imageView = new System.Windows.Forms.PictureBox();
+            this.loadPolylineButton = new System.Windows.Forms.Button();
+            this.savePolylineButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.canvas)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -222,6 +225,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.grayColorCheckbox);
             this.groupBox3.Controls.Add(this.imageView);
             this.groupBox3.Controls.Add(this.loadImageButton);
             this.groupBox3.Location = new System.Drawing.Point(12, 178);
@@ -230,6 +234,17 @@
             this.groupBox3.TabIndex = 18;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Image";
+            // 
+            // grayColorCheckbox
+            // 
+            this.grayColorCheckbox.AutoSize = true;
+            this.grayColorCheckbox.Location = new System.Drawing.Point(93, 75);
+            this.grayColorCheckbox.Name = "grayColorCheckbox";
+            this.grayColorCheckbox.Size = new System.Drawing.Size(79, 17);
+            this.grayColorCheckbox.TabIndex = 7;
+            this.grayColorCheckbox.Text = "Gray colors";
+            this.grayColorCheckbox.UseVisualStyleBackColor = true;
+            this.grayColorCheckbox.CheckedChanged += new System.EventHandler(this.grayColorCheckbox_CheckedChanged);
             // 
             // imageView
             // 
@@ -240,11 +255,33 @@
             this.imageView.TabStop = false;
             this.imageView.Paint += new System.Windows.Forms.PaintEventHandler(this.imageView_Paint);
             // 
+            // loadPolylineButton
+            // 
+            this.loadPolylineButton.Location = new System.Drawing.Point(8, 140);
+            this.loadPolylineButton.Name = "loadPolylineButton";
+            this.loadPolylineButton.Size = new System.Drawing.Size(100, 23);
+            this.loadPolylineButton.TabIndex = 19;
+            this.loadPolylineButton.Text = "Load a polyline";
+            this.loadPolylineButton.UseVisualStyleBackColor = true;
+            this.loadPolylineButton.Click += new System.EventHandler(this.loadPolylineButton_Click);
+            // 
+            // savePolylineButton
+            // 
+            this.savePolylineButton.Location = new System.Drawing.Point(126, 140);
+            this.savePolylineButton.Name = "savePolylineButton";
+            this.savePolylineButton.Size = new System.Drawing.Size(107, 23);
+            this.savePolylineButton.TabIndex = 20;
+            this.savePolylineButton.Text = "Save the polyline";
+            this.savePolylineButton.UseVisualStyleBackColor = true;
+            this.savePolylineButton.Click += new System.EventHandler(this.savePolylineButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1184, 717);
+            this.Controls.Add(this.savePolylineButton);
+            this.Controls.Add(this.loadPolylineButton);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -264,6 +301,7 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imageView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -290,6 +328,9 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.PictureBox imageView;
+        private System.Windows.Forms.CheckBox grayColorCheckbox;
+        private System.Windows.Forms.Button loadPolylineButton;
+        private System.Windows.Forms.Button savePolylineButton;
     }
 }
 

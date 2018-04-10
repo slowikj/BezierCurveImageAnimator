@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Linq;
+using System.IO;
 
 namespace BezierCurveImageAnimator.Polylines
 {
@@ -51,6 +52,29 @@ namespace BezierCurveImageAnimator.Polylines
             _pen = new Pen(Color.Cyan);
 
             _mover = new PolylineMover(this);
+        }
+
+        public Polyline(Point[] points)
+        {
+            _vertices = new List<Vertex>();
+            foreach(Point p in points)
+            {
+                _vertices.Add(new Vertex(p));
+            }
+
+            _mover = new PolylineMover(this);
+            _pen = new Pen(Color.Cyan);
+        }
+        
+        public void Save(string path)
+        {
+            using (StreamWriter writer = new StreamWriter(path))
+            {
+                foreach(Vertex vertex in _vertices)
+                {
+                    writer.WriteLine(String.Format("{0} {1}", vertex.Location.X, vertex.Location.Y));
+                }
+            }
         }
         
         public PointD[] GetPoints()

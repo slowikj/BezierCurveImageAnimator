@@ -18,7 +18,7 @@ namespace BezierCurveImageAnimator.Animators
     {
         private AnimatorType _animatorType;
         private RotatorType _rotatorType;
-        private FastBitmap _image;
+        private FastBitmap _image, _grayImage;
         private BezierPolyline _bezierPolyline;
         private int _canvasWidth, _canvasHeight;
 
@@ -27,6 +27,7 @@ namespace BezierCurveImageAnimator.Animators
             _animatorType = AnimatorType.Spinning;
             _rotatorType = RotatorType.Naive;
             _image = image;
+            //_grayImage = _GetGrayImage(_image);
             _bezierPolyline = bezierPolyline;
 
             _canvasWidth = canvasWidth;
@@ -46,6 +47,7 @@ namespace BezierCurveImageAnimator.Animators
         public void SetImage(FastBitmap image)
         {
             _image = image;
+            _grayImage = _GetGrayImage(image);
         }
 
         public void SetPolyline(BezierPolyline polyline)
@@ -53,25 +55,44 @@ namespace BezierCurveImageAnimator.Animators
             _bezierPolyline = polyline;
         }
 
-        public Animator Get()
+        public Animator Get(bool gray)
         {
-            Animator animator = _GetAnimator();
+            Animator animator = _GetAnimator(gray ? _grayImage : _image);
             animator.SetRotator(_rotatorType);
 
             return animator;
         }
 
-        private Animator _GetAnimator()
+        private Animator _GetAnimator(FastBitmap image)
         {
             switch (_animatorType)
             {
                 case AnimatorType.Bezier:
-                    return new BezierMoveAnimator(_image, _bezierPolyline);
+                    return new BezierMoveAnimator(image, _bezierPolyline);
                 case AnimatorType.Spinning:
-                    return new SpinningAnimator(_image, _canvasWidth, _canvasHeight);
+                    return new SpinningAnimator(image, _canvasWidth, _canvasHeight);
                 default:
                     throw new Exception("bad animator type");
             }
+        }
+
+        private FastBitmap _GetGrayImage(FastBitmap image)
+        {
+            FastBitmap res = new FastBitmap(image.GetBitmap());
+
+            for (int i = 0; i < res.Width; ++i)
+            {
+                for (int j = 0; j < res.Height; ++j)
+                {
+                    Color pixel = image.GetPixel(i, j);
+                    byte I = (byte)((pixel.R * 0.299) + (pixel.G * 0.587) + (pixel.B * 0.114));
+
+
+                    res.SetPixel(i, j, Color.FromArgb(pixel.A, I, I, I));
+                }
+            }
+
+            return res;
         }
     }
 }

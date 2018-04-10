@@ -32,6 +32,12 @@ namespace BezierCurveImageAnimator.Bezier
             _curvePointsNumber = curvePointsNumber;
         }
 
+        public BezierPolyline(Point[] points, int curverPointsNumber = CURVE_POINTS_NUMBER)
+            : base(points)
+        {
+            _curvePointsNumber = curverPointsNumber;
+        }
+
         public BezierCurve GetBezierCurve()
         {
             if(_bezierCurve == null)

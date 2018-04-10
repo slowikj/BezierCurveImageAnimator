@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Linq;
 using System.Drawing.Drawing2D;
+using System.IO;
 
 using BezierCurveImageAnimator.Bezier;
 using BezierCurveImageAnimator.Polylines;
@@ -135,7 +136,7 @@ namespace BezierCurveImageAnimator
 
         private void startAnimationButton_Click(object sender, EventArgs e)
         {
-            _animator = _animatorCreator.Get();
+            _animator = _animatorCreator.Get(grayColorCheckbox.Checked);
             timer.Enabled = true;
         }
 
@@ -190,6 +191,49 @@ namespace BezierCurveImageAnimator
             if(onCurveAnimation.Checked)
             {
                 _animatorCreator.SetAnimator(AnimatorType.Bezier);
+            }
+        }
+
+        private void grayColorCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            _animator = _animatorCreator.Get(grayColorCheckbox.Checked);
+        }
+
+        private void loadPolylineButton_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            DialogResult dialogResult = dialog.ShowDialog();
+
+            List<Point> points = new List<Point>();
+
+            if(dialogResult == DialogResult.OK)
+            {
+                using (StreamReader reader = new StreamReader(dialog.FileName))
+                {
+                    string line;
+                    while((line = reader.ReadLine()) != null)
+                    {
+                        string[] p = line.Split(' ');
+                        points.Add(new Point(int.Parse(p[0]), int.Parse(p[1])));
+                    }
+                }
+
+                _polyline = new BezierPolyline(points.ToArray());
+                _animatorCreator.SetPolyline(_polyline);
+
+                this.Repaint(canvas);
+            }
+            
+        }
+        
+        private void savePolylineButton_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog dialog = new SaveFileDialog();
+            DialogResult result = dialog.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                _polyline.Save(dialog.FileName);
             }
         }
 
